@@ -28,14 +28,9 @@ const useStyles = makeStyles({
 
 export default function ProfileCard(props) {
   const classes = useStyles();
-  const [activeCard, setActiveCard] = useState(false);
-
-  const handlefocus=()=>{
-    setActiveCard(!activeCard);
-  }
 
   return (
-    <Card className={classes.root} variant="outlined" onClick={handlefocus} style={{borderColor: activeCard ? 'pink !important' :'initial !important'}}>
+    <Card className={classes.root} variant="outlined" >
       <CardContent style={{textAlign:'left'}}>
         {props.icon == 'single'? <PersonIcon className={classes.pos} fontSize='medium'/> : <GroupIcon className={classes.pos} fontSize='medium'/> }
         {/* <FontAwesomeIcon icon="fa-solid fa-users" /> */}

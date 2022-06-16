@@ -8,6 +8,7 @@ import Typography from '@material-ui/core/Typography';
 import PersonalInfo from './PersonalInfo';
 import Workspace from './Workspace';
 import ThirdPhase from './ThirdPhase';
+import Finish from './Finish';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -15,11 +16,37 @@ const useStyles = makeStyles((theme) => ({
   },
   button: {
     marginRight: theme.spacing(1),
+    backgroundColor:'rgb(102,77,229)',
+    color:'white',
+    '&:hover':{
+      backgroundColor:'rgb(102,77,229)',
+      color:'white',
+      
+    },
+
   },
   instructions: {
     marginTop: theme.spacing(1),
     marginBottom: theme.spacing(1),
   },
+  MuiStepIconRoot:{
+    '& .MuiStepIcon-active':{
+      color:'rgb(102,77,229)'
+    },
+    '& .MuiStepIcon-completed':{
+      color:'rgb(102,77,229)'
+    }
+  },
+  MuiButtonContained:{
+    
+  },
+  StepperSize:{
+    width:'23%',
+    marginBottom:'2%',
+    '@media (max-width: 780px)' : {
+      width: '240px'
+    },
+  }
 }));
 
 function getSteps() {
@@ -34,10 +61,8 @@ function getStepContent(step) {
       return <Workspace />;
     case 2:
       return <ThirdPhase />;
-    case 3:
-      return 'This is the bit I really care about!';
     default:
-      return 'Unknown step';
+      return <Finish />;
   }
 }
 
@@ -61,14 +86,17 @@ export default function HorizontalLinearStepper() {
     //   newSkipped = new Set(newSkipped.values());
     //   newSkipped.delete(activeStep);
     // }
-
-    setActiveStep((prevActiveStep) => prevActiveStep + 1);
+    if(activeStep < 3)
+    {
+      setActiveStep((prevActiveStep) => prevActiveStep + 1);
+    }
+    
     // setSkipped(newSkipped);
   };
 
-  const handleBack = () => {
-    setActiveStep((prevActiveStep) => prevActiveStep - 1);
-  };
+  // const handleBack = () => {
+  //   setActiveStep((prevActiveStep) => prevActiveStep - 1);
+  // };
 
   const handleSkip = () => {
     // if (!isStepOptional(activeStep)) {
@@ -85,13 +113,13 @@ export default function HorizontalLinearStepper() {
     });
   };
 
-  const handleReset = () => {
-    setActiveStep(0);
-  };
+  // const handleReset = () => {
+  //   setActiveStep(0);
+  // };
 
   return (
     <div className={classes.root} style={{display:'flex',justifyContent:'center',flexDirection:'column',alignItems:'center'}} >
-      <Stepper activeStep={activeStep} style={{ width:'20%'}}>
+      <Stepper activeStep={activeStep} className={classes.StepperSize}>
         {steps.map((label, index) => {
           const stepProps = {};
           const labelProps = {};
@@ -102,52 +130,29 @@ export default function HorizontalLinearStepper() {
         //     stepProps.completed = false;
         //   }
           return (
-            <Step key={label} {...stepProps}>
-              <StepLabel {...labelProps}>{label}</StepLabel>
+            <Step  key={label} {...stepProps}>
+              <StepLabel className={classes.MuiStepIconRoot}  {...labelProps}>{label}</StepLabel>
             </Step>
           );
         })}
       </Stepper>
-      <div>
-        {activeStep === steps.length ? (
-          <div>
-            <Typography className={classes.instructions}>
-              All steps completed - you&apos;re finished
-            </Typography>
-            <Button onClick={handleReset} className={classes.button}>
-              Reset
-            </Button>
-          </div>
-        ) : (
-          <div>
+        
+          <section>
             {getStepContent(activeStep)}
-            <div>
-              {/* <Button disabled={activeStep === 0} onClick={handleBack} className={classes.button}>
-                Back
-              </Button> */}
-              {/* {isStepOptional(activeStep) && (
-                <Button
-                  variant="contained"
-                  color="primary"
-                  onClick={handleSkip}
-                  className={classes.button}
-                >
-                  Skip
-                </Button>
-              )} */}
-
+            <div >
               <Button
                 variant="contained"
-                color="primary"
                 onClick={handleNext}
+                disableRipple
+                inputProps={{classes:{ MuiButtonContained: classes.MuiButtonContained }}}
+                fullWidth={true}
                 className={classes.button}
               >
                 {activeStep === steps.length - 1 ? 'Launch Eden' : 'Create Worspace'}
               </Button>
             </div>
-          </div>
-        )}
+          </section>
+          
       </div>
-    </div>
   );
 }
